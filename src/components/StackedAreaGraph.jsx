@@ -20,7 +20,7 @@ export const StackedAreaGraph = ({
     return null;
   }
 
-  const isMobile = width < 500;
+  const isMobile = width < 640;
 
   const MARGIN = {
     top: 16,

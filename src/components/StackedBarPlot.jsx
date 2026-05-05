@@ -19,7 +19,7 @@ export const StackedBarPlot = ({
     return null;
   }
 
-  const isMobile = width < 500;
+  const isMobile = width < 640;
 
   const MARGIN = {
     top: 16,
@@ -98,7 +98,7 @@ export const StackedBarPlot = ({
         </g>
         <AxisLeft
           yScale={yScale}
-          pixelsPerTick={40}
+          pixelsPerTick={isMobile ? 80 : 40}
           label={isMobile ? "TWh" : "TWh (terawatt-hours)"}
           isMobile={isMobile}
         />

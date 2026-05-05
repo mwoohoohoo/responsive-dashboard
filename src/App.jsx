@@ -208,44 +208,45 @@ function App() {
               <ResponsiveStackedBarPlot data={stackedChartData} />
             </div>
           </div>
-        </section>
-        <section className="main main--two-col">
-          <div className="container">
-            <h2 className="!text-2xl">Five biggest consumers: renewables</h2>
 
-            <ResponsiveLineGraph
-              data={renewableChartData}
-              xVariable="year"
-              yVariable="value"
-              groupBy="country"
-            />
-          </div>
-          <div className="container">
-            <h2 className="!text-2xl">
-              Five biggest renewables consumers (2024)
-            </h2>
-            <Select
-              value={selectedCountry}
-              onValueChange={(value) => setSelectedCountry(value)}
-            >
-              <SelectTrigger className="w-full text-sm bg-white border border-gray-300 rounded-md px-3 py-4">
-                <SelectValue />
-              </SelectTrigger>
+          <div className="panel">
+            <div className="container">
+              <h2 className="!text-2xl">Five biggest consumers: renewables</h2>
 
-              <SelectContent>
-                {countries.map((country) => (
-                  <SelectItem
-                    key={country}
-                    value={country}
-                    className="text-sm hover:bg-gray-100"
-                  >
-                    {country}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              <ResponsiveLineGraph
+                data={renewableChartData}
+                xVariable="year"
+                yVariable="value"
+                groupBy="country"
+              />
+            </div>
+            <div className="container">
+              <h2 className="!text-2xl">
+                Five biggest renewables consumers (2024)
+              </h2>
+              <Select
+                value={selectedCountry}
+                onValueChange={(value) => setSelectedCountry(value)}
+              >
+                <SelectTrigger className="w-full text-sm bg-white border border-gray-300 rounded-md px-3 py-4">
+                  <SelectValue />
+                </SelectTrigger>
 
-            <ResponsiveDonutChart data={renewableData} year={2024} />
+                <SelectContent>
+                  {countries.map((country) => (
+                    <SelectItem
+                      key={country}
+                      value={country}
+                      className="text-sm hover:bg-gray-100"
+                    >
+                      {country}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <ResponsiveDonutChart data={renewableData} year={2024} />
+            </div>
           </div>
         </section>
       </div>
