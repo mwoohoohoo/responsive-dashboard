@@ -1,0 +1,102 @@
+.header {
+  border-radius: 16px;
+  border-style: solid;
+  border-width: 0px;
+  border-color: #d3aff0;
+  background-color: #f0f0f0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  gap: 40px;
+  padding: 40px;
+}
+
+@media (max-width: 1024px) {
+  .header {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 20px;
+  }
+}
+
+.main {
+  background-color: #f0f0f0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  padding: 40px;
+  border-radius: 24px;
+}
+
+@media (max-width: 1024px) {
+  .main {
+    grid-template-columns: 1fr;
+    padding: 20px;
+    gap: 20px;
+  }
+}
+
+.main--two-col {
+  grid-template-columns: 2fr 2fr;
+  padding-bottom: 40px;
+}
+
+@media (max-width: 1024px) {
+  .main--two-col {
+    grid-template-columns: 1fr;
+    padding: 20px;
+    gap: 20px;
+  }
+}
+
+.panel {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+}
+
+@media (max-width: 1024px) {
+  .panel {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+.card-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 40px;
+}
+
+@media (max-width: 1024px) {
+  .card-container {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+.container {
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 40px;
+  background-color: white;
+  overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+@media (max-width: 1024px) {
+  .container {
+    padding: 20px;
+    gap: 20px;
+  }
+}
+
+.container--fill {
+  flex: 1;
+}
+
+/* Chart elements */
