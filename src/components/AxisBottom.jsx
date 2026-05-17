@@ -1,7 +1,7 @@
 const TICK_LENGTH = 6;
 const AXIS_COLOR = "#8C8C8C";
 
-export const AxisBottom = ({ xScale, pixelsPerTick, label }) => {
+export const AxisBottom = ({ xScale, pixelsPerTick, label, isMobile }) => {
   const range = xScale.range();
 
   const width = range[1] - range[0];
@@ -26,7 +26,7 @@ export const AxisBottom = ({ xScale, pixelsPerTick, label }) => {
           <text
             key={value}
             style={{
-              fontSize: "10px",
+              fontSize: isMobile ? "10px" : "12px",
               textAnchor: "middle",
               transform: "translateY(20px)",
             }}
@@ -46,7 +46,7 @@ export const AxisBottom = ({ xScale, pixelsPerTick, label }) => {
   );
 };
 
-export const CategoricalAxisBottom = ({ xScale, label }) => {
+export const CategoricalAxisBottom = ({ xScale, label, isMobile }) => {
   const range = xScale.range();
   const tickLabels = xScale.domain();
 
@@ -85,7 +85,7 @@ export const CategoricalAxisBottom = ({ xScale, label }) => {
           <text
             key={i}
             style={{
-              fontSize: "10px",
+              fontSize: isMobile ? "10px" : "12px",
               textAnchor: "middle",
               transform: "translateY(20px)",
             }}

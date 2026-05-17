@@ -5,6 +5,7 @@ import * as d3 from "d3";
 import { useRef } from "react";
 import { useDimensions } from "../use-dimensions";
 import { useState } from "react";
+import { sourcePalette } from "../lib/colours";
 
 export const StackedBarPlot = ({
   width,
@@ -94,7 +95,7 @@ export const StackedBarPlot = ({
       >
         {rectangles}
         <g transform={`translate(0, ${boundsHeight})`}>
-          <CategoricalAxisBottom xScale={xScale} />
+          <CategoricalAxisBottom xScale={xScale} isMobile={isMobile} />
         </g>
         <AxisLeft
           yScale={yScale}
@@ -117,11 +118,11 @@ export const ResponsiveStackedBarPlot = ({ data, ...props }) => {
   const colorScale = d3
     .scaleOrdinal()
     .domain(allSubgroups)
-    .range(d3.schemeObservable10);
+    .range(allSubgroups.map((g) => sourcePalette[g]));
 
   return (
     <div className="w-full">
-      <div ref={chartRef} className="w-full h-[280px] sm:h-[500px]">
+      <div ref={chartRef} className="w-full h-[280px] sm:h-[400px]">
         <StackedBarPlot
           width={chartSize.width}
           height={chartSize.height}

@@ -5,6 +5,7 @@ import * as d3 from "d3";
 import { useRef } from "react";
 import { useDimensions } from "../use-dimensions";
 import { useState } from "react";
+import { countriesPalette } from "../lib/colours";
 
 export const LineGraph = ({
   width,
@@ -16,6 +17,7 @@ export const LineGraph = ({
   groupBy,
   hoveredGroup,
   setHoveredGroup,
+  colorScale,
 }) => {
   if (width === 0 || height === 0) {
     return null;
@@ -48,11 +50,6 @@ export const LineGraph = ({
     .scaleLinear()
     .domain([0, globalMax])
     .range([boundsHeight, 0]);
-
-  const colorScale = d3
-    .scaleOrdinal()
-    .domain(grouping)
-    .range(d3.schemeObservable10);
 
   const lineGenerator = d3
     .line()
@@ -93,7 +90,12 @@ export const LineGraph = ({
             isMobile={isMobile}
           />
           <g transform={`translate(0, ${boundsHeight})`}>
-            <AxisBottom xScale={xScale} pixelsPerTick={80} label={xLabel} />
+            <AxisBottom
+              xScale={xScale}
+              pixelsPerTick={80}
+              label={xLabel}
+              isMobile={isMobile}
+            />
           </g>
           {allPaths}
         </g>
@@ -112,16 +114,17 @@ export const ResponsiveLineGraph = (props) => {
   const colorScale = d3
     .scaleOrdinal()
     .domain(grouping)
-    .range(d3.schemeObservable10);
+    .range(grouping.map((g) => countriesPalette[g]));
 
   return (
     <div className="w-full">
-      <div ref={chartRef} className="w-full h-[280px] sm:h-[500px]">
+      <div ref={chartRef} className="w-full h-[280px] sm:h-[400px]">
         <LineGraph
           width={chartSize.width}
           height={chartSize.height}
           hoveredGroup={hoveredGroup}
           setHoveredGroup={setHoveredGroup}
+          colorScale={colorScale}
           {...props}
         />
       </div>

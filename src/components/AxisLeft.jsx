@@ -32,7 +32,7 @@ export const AxisLeft = ({
           <line x2={-TICK_LENGTH} stroke={AXIS_COLOR} />
           <text
             style={{
-              fontSize: "10px",
+              fontSize: isMobile ? "10px" : "12px",
               textAlign: "right",
               textAnchor: "end",
               dominantBaseline: "middle",
@@ -49,7 +49,7 @@ export const AxisLeft = ({
         <text
           x={isMobile ? -12 : -height / 2}
           y={isMobile ? -4 : -48}
-          fontSize={12}
+          fontSize={isMobile ? 12 : 14}
           textAnchor={isMobile ? "end" : "middle"}
           transform={isMobile ? "rotate(0)" : "rotate(-90)"}
         >

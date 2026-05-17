@@ -24,7 +24,7 @@ export const LegendBottom = ({
   };
 
   return (
-    <div className="grid grid-cols-2 sm:flex sm:flex-wrap justify-items-start sm:justify-center gap-x-4 sm:gap-x-6 gap-y-0 sm:gap-y-2 py-2">
+    <div className="grid grid-cols-2 sm:flex sm:flex-wrap justify-items-start sm:justify-center gap-x-3  gap-y-0 sm:gap-y-2 py-2">
       {grouping.map((g, i) => (
         <div
           key={i}
@@ -39,7 +39,7 @@ export const LegendBottom = ({
           onClick={() => setHoveredGroup(g)}
         >
           <span
-            className="inline-block w-2 sm:w-4 h-1 rounded-sm"
+            className="inline-block w-3 h-3 rounded-sm"
             style={{ backgroundColor: colorScale(g), textAlign: "left" }}
           />
 

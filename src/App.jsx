@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as d3 from "d3";
 import { ResponsiveLineGraph } from "./components/LineGraph";
 import { ResponsiveStackedAreaGraph } from "./components/StackedAreaGraph";
@@ -13,9 +13,34 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import useEmblaCarousel from "embla-carousel-react";
 import { data } from "./data";
 
 function App() {
+  // carousel-related stuff
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    align: "center",
+    containScroll: "keepSnaps",
+  });
+
+  // selected-dot state on carousel
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+
+    const onSelect = () => {
+      setSelectedIndex(emblaApi.selectedScrollSnap());
+    };
+
+    onSelect();
+    emblaApi.on("select", onSelect);
+
+    return () => {
+      emblaApi.off("select", onSelect);
+    };
+  }, [emblaApi]);
+
   // filter data for stacked area graph
   const stackedData = data
     .filter((d) => d.country === "World")
@@ -135,81 +160,109 @@ function App() {
     <>
       <div className="min-h-screen flex flex-col gap-4">
         <div className="header">
-          <h1 className="font-bold text-left flex-2 !my-2">Energy dashboard</h1>
-          <p className="text-body text-left flex-1">
-            Showcasing responsive design and hover effects with d3.js and React.
-          </p>
-          <p className="text-body text-left flex-1">
-            This data tracks energy consumption from 1965 - 2024 and comes from{" "}
+          <h1 className="font-bold text-left">Energy dashboard</h1>
+
+          <p className="text-body text-left">
+            Energy consumption data from 1965 - 2024, from{" "}
             <a
-              className="font-semibold hover:text-brand-purple"
+              className="font-semibold hover:text-brand-teal"
               href="https://ourworldindata.org/energy"
             >
               Our World in Data.
             </a>
           </p>
+          <p className="text-body text-left">
+            Showcasing responsive design and hover effects with d3.js and React.
+          </p>
         </div>
-        <section className="main">
-          <div className="container">
-            <h2 className="!text-2xl text-left">Stats for 2024</h2>
-            <div className="card-container">
-              <Card bg="bg-brand-aqua">
-                <h3 className="text-lg md:text-xl">Total consumption</h3>
-                <div className="flex flex-col gap-3">
-                  <h4 className="text-3xl md:text-5xl text-primary-black font-semibold">
-                    {d3.format(",.0f")(totalValue)}
-                    <span className="text-base md:text-lg text-gray-700 font-normal">
-                      TWh
-                    </span>
-                  </h4>
-                  <p className="text-sm text-gray-700">
-                    (
-                    {d3.format(".0f")((totalRenewableValue / totalValue) * 100)}
-                    % renewable)
-                  </p>
-                </div>
-              </Card>
-              <Card>
-                <h3 className="text-lg md:text-xl">Highest: overall</h3>
-                <div className="flex flex-col gap-3">
-                  <h4 className="text-3xl md:text-5xl text-primary-black font-semibold">
-                    {topCountry}
-                  </h4>
-                  <p className="text-sm text-gray-700">
-                    {d3.format(".0f")((topValue / totalValue) * 100)}% of global
-                    consumption
-                  </p>
-                </div>
-              </Card>
-              <Card>
-                <h3 className="text-lg md:text-xl">Highest: renewables</h3>
-                <div className="flex flex-col gap-3">
-                  <h4 className="text-3xl md:text-5xl text-primary-black font-semibold">
-                    {topRenewableCountry}
-                  </h4>
-                  <p className="text-sm text-gray-700">
-                    {d3.format(".0f")(
-                      (topRenewableValue / totalRenewableValue) * 100,
-                    )}
-                    % of global renewables total
-                  </p>
-                </div>
-              </Card>
+
+        <div className="container container--transparent ">
+          <div className="embla" ref={emblaRef}>
+            <div className="embla__container">
+              <div
+                className={`embla__slide ${selectedIndex === 0 ? "embla__slide--active" : ""}`}
+              >
+                <Card bg="bg-brand-aqua">
+                  <h3 className="text-lg">Total consumption 2024</h3>
+                  <div className="flex flex-col gap-1">
+                    <h4 className="text-2xl md:text-3xl text-primary-black font-semibold">
+                      {d3.format(",.0f")(totalValue)}
+                      <span className="text-base  text-gray-700 font-normal">
+                        TWh
+                      </span>
+                    </h4>
+                    <p className="text-xs xl:text-sm text-gray-700">
+                      of which{" "}
+                      {d3.format(".0f")(
+                        (totalRenewableValue / totalValue) * 100,
+                      )}
+                      % renewable
+                    </p>
+                  </div>
+                </Card>
+              </div>
+              <div
+                className={`embla__slide ${selectedIndex === 1 ? "embla__slide--active" : ""}`}
+              >
+                <Card>
+                  <h3 className="text-lg">Highest 2024: overall</h3>
+                  <div className="flex flex-col gap-1">
+                    <h4 className="text-2xl md:text-3xl text-primary-black font-semibold">
+                      {topCountry}
+                    </h4>
+                    <p className="text-xs xl:text-sm text-gray-700">
+                      {d3.format(".0f")((topValue / totalValue) * 100)}% of
+                      global consumption
+                    </p>
+                  </div>
+                </Card>
+              </div>
+              <div
+                className={`embla__slide ${selectedIndex === 2 ? "embla__slide--active" : ""}`}
+              >
+                <Card>
+                  <h3 className="text-lg">Highest 2024: renewables</h3>
+                  <div className="flex flex-col gap-1">
+                    <h4 className="text-2xl md:text-3xl text-primary-black font-semibold">
+                      {topRenewableCountry}
+                    </h4>
+                    <p className="text-xs xl:text-sm text-gray-700">
+                      {d3.format(".0f")(
+                        (topRenewableValue / totalRenewableValue) * 100,
+                      )}
+                      % of global total
+                    </p>
+                  </div>
+                </Card>
+              </div>
+            </div>
+            <div className="embla__dots">
+              {[0, 1, 2].map((index) => (
+                <button
+                  key={index}
+                  className={`embla__dot ${
+                    selectedIndex === index ? "embla__dot--active" : ""
+                  }`}
+                  onClick={() => emblaApi?.scrollTo(index)}
+                />
+              ))}
             </div>
           </div>
+        </div>
 
+        <section className="main">
           <div className="panel">
             <div className="container">
               <h2 className="!text-2xl">World consumption mix</h2>
               <ResponsiveStackedAreaGraph data={stackedData} xVariable="year" />
             </div>
             <div className="container">
-              <h2 className="!text-2xl">Five biggest consumers (2024)</h2>
+              <h2 className="!text-2xl">Five biggest consumers: 2024</h2>
               <ResponsiveStackedBarPlot data={stackedChartData} />
             </div>
           </div>
 
-          <div className="panel">
+          <div className="panel panel--thirds">
             <div className="container">
               <h2 className="!text-2xl">Five biggest consumers: renewables</h2>
 
@@ -222,7 +275,7 @@ function App() {
             </div>
             <div className="container">
               <h2 className="!text-2xl">
-                Five biggest renewables consumers (2024)
+                Five biggest renewables consumers: 2024
               </h2>
               <Select
                 value={selectedCountry}

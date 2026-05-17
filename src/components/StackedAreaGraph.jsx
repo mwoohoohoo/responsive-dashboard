@@ -5,6 +5,7 @@ import { LegendBottom } from "./LegendBottom";
 import { useRef } from "react";
 import { useDimensions } from "../use-dimensions";
 import { useState } from "react";
+import { energyPalette } from "../lib/colours";
 
 export const StackedAreaGraph = ({
   width,
@@ -83,7 +84,7 @@ export const StackedAreaGraph = ({
       >
         {allPath}
         <g transform={`translate(0, ${boundsHeight})`}>
-          <AxisBottom xScale={xScale} pixelsPerTick={60} />
+          <AxisBottom xScale={xScale} pixelsPerTick={80} isMobile={isMobile} />
         </g>
         <AxisLeft
           yScale={yScale}
@@ -108,11 +109,11 @@ export const ResponsiveStackedAreaGraph = ({ data, ...props }) => {
   const colorScale = d3
     .scaleOrdinal()
     .domain(allSubgroups)
-    .range(d3.schemeObservable10);
+    .range(allSubgroups.map((g) => energyPalette[g]));
 
   return (
     <div className="w-full">
-      <div ref={chartRef} className="w-full h-[280px] sm:h-[500px]">
+      <div ref={chartRef} className="w-full h-[280px] sm:h-[400px]">
         <StackedAreaGraph
           width={chartSize.width}
           height={chartSize.height}
