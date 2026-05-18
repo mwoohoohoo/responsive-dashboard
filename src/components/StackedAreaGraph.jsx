@@ -16,6 +16,7 @@ export const StackedAreaGraph = ({
   xVariable,
   hoveredGroup,
   setHoveredGroup,
+  setExpandedGroup,
 }) => {
   if (width === 0 || height === 0) {
     return null;
@@ -57,6 +58,37 @@ export const StackedAreaGraph = ({
     .y0((d) => yScale(d[0]))
     .y1((d) => yScale(d[1]));
 
+  const relatedGroups = {
+    renewValue: [
+      "renewValue",
+      "hydro",
+      "solar",
+      "wind",
+      "biofuel",
+      "other_renewable",
+    ],
+
+    nonRenewValue: ["nonRenewValue", "coal", "oil", "gas"],
+
+    nuclear: ["nuclear"],
+  };
+
+  const parentLookup = {
+    coal: "nonRenewValue",
+    oil: "nonRenewValue",
+    gas: "nonRenewValue",
+
+    hydro: "renewValue",
+    solar: "renewValue",
+    wind: "renewValue",
+    biofuel: "renewValue",
+    other_renewable: "renewValue",
+  };
+
+  const normalizedHover = parentLookup[hoveredGroup] || hoveredGroup;
+
+  const activeGroups = normalizedHover ? relatedGroups[normalizedHover] : null;
+
   const allPath = series.map((serie, i) => {
     const path = areaBuilder(serie);
     return (
@@ -65,9 +97,15 @@ export const StackedAreaGraph = ({
         d={path}
         stroke="none"
         fill={colorScale(serie.key)}
-        opacity={hoveredGroup === null || hoveredGroup === serie.key ? 1 : 0.2}
-        onMouseEnter={() => setHoveredGroup(serie.key)}
-        onMouseLeave={() => setHoveredGroup(null)}
+        opacity={
+          activeGroups === null || activeGroups.includes(serie.key) ? 1 : 0.2
+        }
+        onMouseEnter={() => {
+          const normalized = parentLookup[serie.key] || serie.key;
+
+          setHoveredGroup(normalized);
+          setExpandedGroup(normalized);
+        }}
         style={{ transition: "opacity 200ms" }}
         className="cursor-pointer"
       />
@@ -101,34 +139,79 @@ export const ResponsiveStackedAreaGraph = ({ data, ...props }) => {
   const chartRef = useRef(null);
   const chartSize = useDimensions(chartRef);
   const [hoveredGroup, setHoveredGroup] = useState(null);
+  const [expandedGroup, setExpandedGroup] = useState(null);
 
-  const allSubgroups = Object.keys(data[0]).filter(
-    (key) => key !== "year" && typeof data[0][key] === "number",
-  );
+  let grouping = ["nonRenewValue", "renewValue", "nuclear"];
+
+  let legendGrouping = grouping;
+
+  if (expandedGroup === "nonRenewValue") {
+    grouping = ["coal", "oil", "gas", "renewValue", "nuclear"];
+
+    legendGrouping = ["coal", "oil", "gas"];
+  }
+
+  if (expandedGroup === "renewValue") {
+    grouping = [
+      "nonRenewValue",
+      "hydro",
+      "solar",
+      "wind",
+      "biofuel",
+      "other_renewable",
+      "nuclear",
+    ];
+
+    legendGrouping = ["hydro", "solar", "wind", "biofuel", "other_renewable"];
+  }
+
+  if (expandedGroup === "nuclear") {
+    legendGrouping = ["nuclear"];
+  }
+
+  const legendHoveredGroupMap = {
+    nonRenewValue: ["coal", "oil", "gas"],
+    renewValue: ["hydro", "solar", "wind", "biofuel", "other_renewable"],
+  };
+
+  const legendHoveredGroups =
+    hoveredGroup === null
+      ? null
+      : expandedGroup === hoveredGroup
+        ? legendHoveredGroupMap[hoveredGroup] || [hoveredGroup]
+        : [hoveredGroup];
 
   const colorScale = d3
     .scaleOrdinal()
-    .domain(allSubgroups)
-    .range(allSubgroups.map((g) => energyPalette[g]));
+    .domain(grouping)
+    .range(grouping.map((g) => energyPalette[g]));
 
   return (
     <div className="w-full">
-      <div ref={chartRef} className="w-full h-[280px] sm:h-[400px]">
+      <div
+        ref={chartRef}
+        className="w-full h-[280px] sm:h-[400px]"
+        onMouseLeave={() => {
+          setHoveredGroup(null);
+          setExpandedGroup(null);
+        }}
+      >
         <StackedAreaGraph
           width={chartSize.width}
           height={chartSize.height}
           data={data}
-          grouping={allSubgroups}
+          grouping={grouping}
           colorScale={colorScale}
           hoveredGroup={hoveredGroup}
           setHoveredGroup={setHoveredGroup}
+          setExpandedGroup={setExpandedGroup}
           {...props}
         />
       </div>
       <LegendBottom
-        grouping={allSubgroups}
+        grouping={legendGrouping}
         colorScale={colorScale}
-        hoveredGroup={hoveredGroup}
+        hoveredGroup={legendHoveredGroups}
         setHoveredGroup={setHoveredGroup}
       />
     </div>

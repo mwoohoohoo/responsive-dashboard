@@ -6,6 +6,7 @@ import { useRef } from "react";
 import { useDimensions } from "../use-dimensions";
 import { useState } from "react";
 import { sourcePalette } from "../lib/colours";
+import { Tooltip } from "./ui/Tooltip";
 
 export const StackedBarPlot = ({
   width,
@@ -15,6 +16,7 @@ export const StackedBarPlot = ({
   colorScale,
   hoveredGroup,
   setHoveredGroup,
+  setInteractionData,
 }) => {
   if (width === 0 || height === 0) {
     return null;
@@ -74,8 +76,32 @@ export const StackedBarPlot = ({
               opacity={
                 hoveredGroup === null || hoveredGroup === subgroup.key ? 1 : 0.2
               }
-              onMouseEnter={() => setHoveredGroup(subgroup.key)}
-              onMouseLeave={() => setHoveredGroup(null)}
+              onMouseEnter={() => {
+                setHoveredGroup(subgroup.key);
+                setInteractionData({
+                  xPos:
+                    MARGIN.left +
+                    xScale(group.data.country) +
+                    xScale.bandwidth() / 2,
+                  yPos:
+                    MARGIN.top -
+                    14 +
+                    yScale(group[1]) +
+                    (yScale(group[0]) - yScale(group[1])) / 2,
+                  tickLength: xScale.bandwidth() / 2 + 4,
+                  placement:
+                    xScale(group.data.country) < boundsWidth / 2
+                      ? "left"
+                      : "right",
+
+                  value: group.data[subgroup.key],
+                  color: colorScale(subgroup.key),
+                });
+              }}
+              onMouseLeave={() => {
+                setHoveredGroup(null);
+                setInteractionData(null);
+              }}
               style={{ transition: "opacity 200ms" }}
               className="cursor-pointer"
             ></rect>
@@ -112,6 +138,7 @@ export const ResponsiveStackedBarPlot = ({ data, ...props }) => {
   const chartRef = useRef(null);
   const chartSize = useDimensions(chartRef);
   const [hoveredGroup, setHoveredGroup] = useState(null);
+  const [interactionData, setInteractionData] = useState(null);
 
   const allSubgroups = Object.keys(data[0]).filter((key) => key !== "country");
 
@@ -122,7 +149,7 @@ export const ResponsiveStackedBarPlot = ({ data, ...props }) => {
 
   return (
     <div className="w-full">
-      <div ref={chartRef} className="w-full h-[280px] sm:h-[400px]">
+      <div ref={chartRef} className="relative w-full h-[280px] sm:h-[400px]">
         <StackedBarPlot
           width={chartSize.width}
           height={chartSize.height}
@@ -131,8 +158,13 @@ export const ResponsiveStackedBarPlot = ({ data, ...props }) => {
           colorScale={colorScale}
           hoveredGroup={hoveredGroup}
           setHoveredGroup={setHoveredGroup}
+          setInteractionData={setInteractionData}
           {...props}
         />
+        {/* tooltip layer */}
+        <div className="absolute inset-0 pointer-events-none">
+          <Tooltip interactionData={interactionData} />
+        </div>
       </div>
       <LegendBottom
         grouping={allSubgroups}

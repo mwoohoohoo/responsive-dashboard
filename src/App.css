@@ -11,7 +11,7 @@
 @media (max-width: 1024px) {
   .header {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 12px;
     padding: 20px;
   }
 }
@@ -28,8 +28,8 @@
 @media (max-width: 1024px) {
   .main {
     grid-template-columns: 1fr;
-    padding: 20px;
-    gap: 20px;
+    padding: 12px;
+    gap: 12px;
   }
 }
 
@@ -42,7 +42,7 @@
 @media (max-width: 1024px) {
   .panel {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 12px;
   }
 }
 
@@ -53,7 +53,7 @@
 @media (max-width: 1024px) {
   .panel--thirds {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 12px;
   }
 }
 
@@ -80,6 +80,20 @@
 .container--transparent {
   padding: 0px;
   background-color: transparent;
+}
+
+/* Tooltip */
+
+.tooltip {
+  background-color: white;
+  color: #08060d;
+  border: 2px solid;
+  border-radius: 8px;
+  padding: 2px 6px;
+  max-width: 120px;
+  max-height: 28px;
+  display: flex;
+  align-items: baseline;
 }
 
 /* Embla carousel */

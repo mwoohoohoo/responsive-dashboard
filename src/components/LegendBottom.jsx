@@ -12,7 +12,7 @@ export const LegendBottom = ({
       biofuel: "Biofuel",
       other_renewable: "Other",
       nuclear: "Nuclear",
-      nonRenewValue: "Fossil fuels",
+      nonRenewValue: "Fossil",
       renewValue: "Renewables",
       coal: "Coal",
       oil: "Oil",
@@ -24,23 +24,27 @@ export const LegendBottom = ({
   };
 
   return (
-    <div className="grid grid-cols-2 sm:flex sm:flex-wrap justify-items-start sm:justify-center gap-x-3  gap-y-0 sm:gap-y-2 py-2">
+    <div className="flex flex-wrap justify-center gap-x-1 md:gap-x-3 gap-y-0 sm:gap-y-2 pt-2">
       {grouping.map((g, i) => (
         <div
           key={i}
           className="flex items-center gap-2 px-3 py-2 rounded-2xl hover:bg-gray-100 cursor-pointer"
           style={{
-            backgroundColor: hoveredGroup === g ? "#f3f4f6" : "transparent",
-            opacity: hoveredGroup === null || hoveredGroup === g ? 1 : 0.2,
-            transition: "opacity 200ms",
+            opacity:
+              hoveredGroup === null ||
+              (Array.isArray(hoveredGroup)
+                ? hoveredGroup.includes(g)
+                : hoveredGroup === g)
+                ? 1
+                : 0.2,
           }}
           onMouseEnter={() => setHoveredGroup(g)}
           onMouseLeave={() => setHoveredGroup(null)}
           onClick={() => setHoveredGroup(g)}
         >
           <span
-            className="inline-block w-3 h-3 rounded-sm"
-            style={{ backgroundColor: colorScale(g), textAlign: "left" }}
+            className="inline-block w-2 h-2 rounded-sm"
+            style={{ backgroundColor: colorScale(g) }}
           />
 
           <span className="text-xs">{formatLegendLabel(g)}</span>

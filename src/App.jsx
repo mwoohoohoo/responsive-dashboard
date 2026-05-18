@@ -41,15 +41,22 @@ function App() {
     };
   }, [emblaApi]);
 
-  // filter data for stacked area graph
+  // filter data for stacked area graph - grouped and ungrouped
   const stackedData = data
     .filter((d) => d.country === "World")
     .map((d) => ({
       year: d.year,
+
+      nonRenewValue: d.coal + d.oil + d.gas,
+
+      renewValue: d.hydro + d.solar + d.wind + d.biofuel + d.other_renewable,
+
+      nuclear: d.nuclear,
+
+      // keep raw values for expansion
       coal: d.coal,
       oil: d.oil,
       gas: d.gas,
-      nuclear: d.nuclear,
       hydro: d.hydro,
       solar: d.solar,
       wind: d.wind,
@@ -162,7 +169,7 @@ function App() {
         <div className="header">
           <h1 className="font-bold text-left">Energy dashboard</h1>
 
-          <p className="text-body text-left">
+          <p className="text-sm md:text-body text-left">
             Energy consumption data from 1965 - 2024, from{" "}
             <a
               className="font-semibold hover:text-brand-teal"
@@ -171,7 +178,7 @@ function App() {
               Our World in Data.
             </a>
           </p>
-          <p className="text-body text-left">
+          <p className="text-sm md:text-body text-left">
             Showcasing responsive design and hover effects with d3.js and React.
           </p>
         </div>
@@ -183,11 +190,13 @@ function App() {
                 className={`embla__slide ${selectedIndex === 0 ? "embla__slide--active" : ""}`}
               >
                 <Card bg="bg-brand-aqua">
-                  <h3 className="text-lg">Total consumption 2024</h3>
+                  <h3 className="text-base md:text-lg">
+                    Total consumption 2024
+                  </h3>
                   <div className="flex flex-col gap-1">
                     <h4 className="text-2xl md:text-3xl text-primary-black font-semibold">
                       {d3.format(",.0f")(totalValue)}
-                      <span className="text-base  text-gray-700 font-normal">
+                      <span className="text-sm md:text-base text-gray-700 font-normal">
                         TWh
                       </span>
                     </h4>
@@ -205,7 +214,9 @@ function App() {
                 className={`embla__slide ${selectedIndex === 1 ? "embla__slide--active" : ""}`}
               >
                 <Card>
-                  <h3 className="text-lg">Highest 2024: overall</h3>
+                  <h3 className="text-base md:text-lg">
+                    Highest 2024: overall
+                  </h3>
                   <div className="flex flex-col gap-1">
                     <h4 className="text-2xl md:text-3xl text-primary-black font-semibold">
                       {topCountry}
@@ -221,7 +232,9 @@ function App() {
                 className={`embla__slide ${selectedIndex === 2 ? "embla__slide--active" : ""}`}
               >
                 <Card>
-                  <h3 className="text-lg">Highest 2024: renewables</h3>
+                  <h3 className="text-base md:text-lg">
+                    Highest 2024: renewables
+                  </h3>
                   <div className="flex flex-col gap-1">
                     <h4 className="text-2xl md:text-3xl text-primary-black font-semibold">
                       {topRenewableCountry}
@@ -253,18 +266,18 @@ function App() {
         <section className="main">
           <div className="panel">
             <div className="container">
-              <h2 className="!text-2xl">World consumption mix</h2>
+              <h2>World consumption mix</h2>
               <ResponsiveStackedAreaGraph data={stackedData} xVariable="year" />
             </div>
             <div className="container">
-              <h2 className="!text-2xl">Five biggest consumers: 2024</h2>
+              <h2>Biggest consumers: 2024</h2>
               <ResponsiveStackedBarPlot data={stackedChartData} />
             </div>
           </div>
 
           <div className="panel panel--thirds">
             <div className="container">
-              <h2 className="!text-2xl">Five biggest consumers: renewables</h2>
+              <h2>Biggest consumers: renewables</h2>
 
               <ResponsiveLineGraph
                 data={renewableChartData}
@@ -274,9 +287,10 @@ function App() {
               />
             </div>
             <div className="container">
-              <h2 className="!text-2xl">
-                Five biggest renewables consumers: 2024
-              </h2>
+              <div className="flex items-baseline justify-between">
+                <h2>Breakdown: renewables consumers</h2>
+                <p className="text-xs text-gray-700">2024</p>
+              </div>
               <Select
                 value={selectedCountry}
                 onValueChange={(value) => setSelectedCountry(value)}
@@ -304,7 +318,7 @@ function App() {
         </section>
       </div>
 
-      <div className="h-20 flex flex-col mt-10 gap-2 justify-center items-center">
+      <div className="h-20 flex flex-col mt-5 md:mt-10 gap-2 justify-center items-center">
         <p className="text-sm text-brand-black-500">
           A portfolio project by Merri Hookway
         </p>
