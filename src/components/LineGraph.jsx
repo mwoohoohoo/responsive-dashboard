@@ -32,8 +32,8 @@ export const LineGraph = ({
   const MARGIN = {
     top: 16,
     bottom: isMobile ? 24 : 32,
-    left: isMobile ? 40 : 80,
-    right: isMobile ? 8 : 16,
+    left: isMobile ? 40 : 60,
+    right: isMobile ? 4 : 8,
   };
 
   const boundsWidth = width - MARGIN.left - MARGIN.right;
@@ -172,7 +172,7 @@ export const LineGraph = ({
           <AxisLeft
             yScale={yScale}
             pixelsPerTick={isMobile ? 80 : 40}
-            label={isMobile ? "TWh" : "TWh (terawatt-hours)"}
+            label="TWh"
             boundsWidth={boundsWidth}
             isMobile={isMobile}
           />
@@ -214,7 +214,7 @@ export const ResponsiveLineGraph = (props) => {
 
   return (
     <div className="w-full">
-      <div ref={chartRef} className="relative w-full h-[280px] sm:h-[400px]">
+      <div ref={chartRef} className="relative w-full h-[260px] sm:h-[360px]">
         <LineGraph
           width={chartSize.width}
           height={chartSize.height}

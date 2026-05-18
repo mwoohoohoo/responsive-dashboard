@@ -49,7 +49,7 @@ export const AxisLeft = ({
         <text
           x={isMobile ? -12 : -height / 2}
           y={isMobile ? -4 : -48}
-          fontSize={isMobile ? 12 : 14}
+          fontSize={12}
           textAnchor={isMobile ? "end" : "middle"}
           transform={isMobile ? "rotate(0)" : "rotate(-90)"}
         >

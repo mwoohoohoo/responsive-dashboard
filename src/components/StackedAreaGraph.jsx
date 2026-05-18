@@ -27,8 +27,8 @@ export const StackedAreaGraph = ({
   const MARGIN = {
     top: 16,
     bottom: isMobile ? 24 : 32,
-    left: isMobile ? 40 : 80,
-    right: isMobile ? 8 : 16,
+    left: isMobile ? 40 : 60,
+    right: isMobile ? 4 : 8,
   };
 
   const boundsWidth = width - MARGIN.right - MARGIN.left;
@@ -127,7 +127,7 @@ export const StackedAreaGraph = ({
         <AxisLeft
           yScale={yScale}
           pixelsPerTick={isMobile ? 80 : 40}
-          label={isMobile ? "TWh" : "TWh (terawatt-hours)"}
+          label={"TWh"}
           isMobile={isMobile}
         />
       </g>
@@ -190,7 +190,7 @@ export const ResponsiveStackedAreaGraph = ({ data, ...props }) => {
     <div className="w-full">
       <div
         ref={chartRef}
-        className="w-full h-[280px] sm:h-[400px]"
+        className="w-full h-[260px] sm:h-[360px]"
         onMouseLeave={() => {
           setHoveredGroup(null);
           setExpandedGroup(null);

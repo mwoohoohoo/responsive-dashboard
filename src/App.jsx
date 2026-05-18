@@ -75,7 +75,7 @@ function App() {
     .map((d) => d.country);
 
   // line chart only shows data for the biggest consumers in 2024
-  const lineChartData = countryData.filter((d) =>
+  const topData2024 = countryData.filter((d) =>
     topCountries2024.includes(d.country),
   );
 
@@ -86,7 +86,7 @@ function App() {
   const renewableSum = (d) =>
     d.hydro + d.solar + d.wind + d.biofuel + d.other_renewable;
 
-  // biggest renewables consumers in 2-24
+  // biggest renewables consumers in 2024
   const topRenewableCountries = countryData
     .filter((d) => d.year === 2024)
     .sort((a, b) => renewableSum(b) - renewableSum(a))
@@ -103,7 +103,7 @@ function App() {
     }));
 
   // convert filtered data into plottable rows (bar chart)
-  const stackedChartData = lineChartData
+  const stackedChartData = topData2024
     .filter((d) => d.year === 2024)
     .map((d) => ({
       country: d.country,
@@ -113,15 +113,11 @@ function App() {
     }));
 
   // country selector state
-  const [selectedCountry, setSelectedCountry] = useState("Brazil");
+  const [selectedCountry, setSelectedCountry] = useState("Argentina");
 
   // alphabetical countries list
   const countries = [
-    ...new Set(
-      data
-        .filter((d) => topRenewableCountries.includes(d.country))
-        .map((d) => d.country),
-    ),
+    ...new Set(data.filter((d) => d.country !== "World").map((d) => d.country)),
   ].sort();
 
   // filter data to selected country
@@ -167,19 +163,17 @@ function App() {
     <>
       <div className="min-h-screen flex flex-col gap-4">
         <div className="header">
-          <h1 className="font-bold text-left">Energy dashboard</h1>
+          <h1 className="text-left">Energy dashboard</h1>
 
-          <p className="text-sm md:text-body text-left">
-            Energy consumption data from 1965 - 2024, from{" "}
+          <p className="text-body text-left">
+            Global energy consumption from 1965 - 2024 in terawatt-hours (TWh).
+            Source:{" "}
             <a
               className="font-semibold hover:text-brand-teal"
               href="https://ourworldindata.org/energy"
             >
               Our World in Data.
             </a>
-          </p>
-          <p className="text-sm md:text-body text-left">
-            Showcasing responsive design and hover effects with d3.js and React.
           </p>
         </div>
 
@@ -190,17 +184,15 @@ function App() {
                 className={`embla__slide ${selectedIndex === 0 ? "embla__slide--active" : ""}`}
               >
                 <Card bg="bg-brand-aqua">
-                  <h3 className="text-base md:text-lg">
-                    Total consumption 2024
-                  </h3>
+                  <h2>Global demand 2024</h2>
                   <div className="flex flex-col gap-1">
-                    <h4 className="text-2xl md:text-3xl text-primary-black font-semibold">
+                    <p className="text-highlight">
                       {d3.format(",.0f")(totalValue)}
-                      <span className="text-sm md:text-base text-gray-700 font-normal">
+                      <span className="text-sm md:text-base opacity-70 font-normal">
                         TWh
                       </span>
-                    </h4>
-                    <p className="text-xs xl:text-sm text-gray-700">
+                    </p>
+                    <p className="text-caption">
                       of which{" "}
                       {d3.format(".0f")(
                         (totalRenewableValue / totalValue) * 100,
@@ -214,16 +206,12 @@ function App() {
                 className={`embla__slide ${selectedIndex === 1 ? "embla__slide--active" : ""}`}
               >
                 <Card>
-                  <h3 className="text-base md:text-lg">
-                    Highest 2024: overall
-                  </h3>
+                  <h2>Largest consumer</h2>
                   <div className="flex flex-col gap-1">
-                    <h4 className="text-2xl md:text-3xl text-primary-black font-semibold">
-                      {topCountry}
-                    </h4>
-                    <p className="text-xs xl:text-sm text-gray-700">
+                    <p className="text-highlight">{topCountry}</p>
+                    <p className="text-caption">
                       {d3.format(".0f")((topValue / totalValue) * 100)}% of
-                      global consumption
+                      global total in 2024
                     </p>
                   </div>
                 </Card>
@@ -232,18 +220,14 @@ function App() {
                 className={`embla__slide ${selectedIndex === 2 ? "embla__slide--active" : ""}`}
               >
                 <Card>
-                  <h3 className="text-base md:text-lg">
-                    Highest 2024: renewables
-                  </h3>
+                  <h2>Largest renewables consumer</h2>
                   <div className="flex flex-col gap-1">
-                    <h4 className="text-2xl md:text-3xl text-primary-black font-semibold">
-                      {topRenewableCountry}
-                    </h4>
-                    <p className="text-xs xl:text-sm text-gray-700">
+                    <p className="text-highlight">{topRenewableCountry}</p>
+                    <p className="text-caption">
                       {d3.format(".0f")(
                         (topRenewableValue / totalRenewableValue) * 100,
                       )}
-                      % of global total
+                      % of global total in 2024
                     </p>
                   </div>
                 </Card>
@@ -266,19 +250,36 @@ function App() {
         <section className="main">
           <div className="panel">
             <div className="container">
-              <h2>World consumption mix</h2>
+              <div className="container--text">
+                <h3>Global energy mix</h3>
+                <p className="text-body text-left opacity-70">
+                  Fossil fuels remain dominant, despite renewable energy
+                  consumpton increasing.
+                </p>
+              </div>
               <ResponsiveStackedAreaGraph data={stackedData} xVariable="year" />
             </div>
             <div className="container">
-              <h2>Biggest consumers: 2024</h2>
+              <div className="container--text">
+                <h3>Top energy consumers (2024)</h3>
+                <p className="text-body text-left opacity-70">
+                  China and the USA consumed more than India, Japan and Russia
+                  combined.
+                </p>
+              </div>
               <ResponsiveStackedBarPlot data={stackedChartData} />
             </div>
           </div>
 
           <div className="panel panel--thirds">
             <div className="container">
-              <h2>Biggest consumers: renewables</h2>
-
+              <div className="container--text">
+                <h3>Top renewable energy consumers</h3>
+                <p className="text-body text-left opacity-70">
+                  China overtook all other countries in renewable consumption
+                  after 2006.
+                </p>
+              </div>
               <ResponsiveLineGraph
                 data={renewableChartData}
                 xVariable="year"
@@ -287,10 +288,8 @@ function App() {
               />
             </div>
             <div className="container">
-              <div className="flex items-baseline justify-between">
-                <h2>Breakdown: renewables consumers</h2>
-                <p className="text-xs text-gray-700">2024</p>
-              </div>
+              <h3>Renewables mix by country (2024)</h3>
+
               <Select
                 value={selectedCountry}
                 onValueChange={(value) => setSelectedCountry(value)}
@@ -322,7 +321,10 @@ function App() {
         <p className="text-sm text-brand-black-500">
           A portfolio project by Merri Hookway
         </p>
-        <p className="text-sm text-brand-black-500">© 2026</p>
+        <p className="text-sm text-brand-black-500">
+          Built with React and d3.js
+        </p>
+        <p className="text-xs text-brand-black-500">© 2026</p>
       </div>
     </>
   );

@@ -3,7 +3,6 @@ import { LegendBottom } from "./LegendBottom";
 import { useRef } from "react";
 import { useDimensions } from "../use-dimensions";
 import { useState } from "react";
-import { useMediaQuery } from "../hooks/useMediaQuery";
 import { energyPalette } from "../lib/colours";
 
 export const DonutChart = ({
@@ -19,12 +18,14 @@ export const DonutChart = ({
     return null;
   }
 
-  const MARGIN = 16;
+  const isMobile = width < 320;
+
+  const MARGIN = isMobile ? 4 : 8;
 
   const boundsWidth = width - MARGIN * 2;
   const boundsHeight = height - MARGIN * 2;
 
-  const radius = Math.min(boundsWidth, boundsHeight) / 2 - MARGIN;
+  const radius = Math.min(boundsWidth, boundsHeight) / 2 - MARGIN * 2;
 
   // Include only selected year and country
   const filteredData = data.filter((d) => d.year === year);
@@ -107,7 +108,7 @@ export const ResponsiveDonutChart = (props) => {
 
   return (
     <div className="w-full">
-      <div ref={chartRef} className="relative w-full h-[280px] sm:h-[360px]">
+      <div ref={chartRef} className="relative w-full h-[240px] sm:h-[280px]">
         <DonutChart
           width={chartSize.width}
           height={chartSize.height}
@@ -118,12 +119,12 @@ export const ResponsiveDonutChart = (props) => {
         />
         {/* tooltip layer */}
         <div className="absolute inset-0 pointer-events-none flex flex-col justify-center gap-0 md:gap-0">
-          <p className="text-xs md:text-base">
+          <p className="text-body">
             {hoveredData
               ? `${d3.format(".0f")(hoveredData.value)}`
               : `${d3.format(".0f")(totalRenewable)}`}
           </p>
-          <p className="text-xs md:text-sm  text-gray-700">TWh</p>
+          <p className="text-xs text-gray-700">TWh</p>
         </div>
       </div>
       <LegendBottom

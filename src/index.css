@@ -9,6 +9,7 @@
   --color-primary-black: #08060d;
   --color-brand-teal: #158c8c;
   --color-brand-aqua: #94e3e3;
+  --color-brand-pale-aqua: #e1f2f2;
 }
 
 :root {
@@ -37,6 +38,14 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --text-h1: clamp(28px, calc(24px + 1vw), 36px);
+  --text-h2: clamp(16px, calc(15px + 1vw), 18px);
+  --text-h3: clamp(20px, calc(18px + 0.6vw), 24px);
+  --text-highlight: clamp(24px, calc(20px + 0.6vw), 32px);
+
+  --text-body: clamp(14px, calc(13px + 0.35vw), 16px);
+  --text-caption: clamp(12px, calc(11px + 0.25vw), 16px);
 
   @media (max-width: 1024px) {
     font-size: 16px;
@@ -126,34 +135,36 @@ body {
 }
 
 h1,
-h2 {
+h3 {
   font-family: var(--heading);
   font-weight: 500;
   color: var(--text-h);
 }
 
 h1 {
-  font-size: 36px;
+  font-size: var(--text-h1);
   letter-spacing: 0px;
   margin: 0px 0;
   line-height: 115%;
-  @media (max-width: 1024px) {
-    font-size: 28px;
-    margin: 0;
-  }
 }
 h2 {
-  font-size: 24px;
+  font-size: var(--text-h2);
   text-align: left;
   line-height: 118%;
   letter-spacing: 0px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
+  color: var(--text-h);
 }
+h3 {
+  font-size: var(--text-h3);
+  text-align: left;
+  line-height: 118%;
+  letter-spacing: 0px;
+  margin-bottom: 8px;
+}
+
 p {
   margin: 0;
+  color: var(--text-h);
 }
 
 @theme inline {
@@ -208,5 +219,25 @@ p {
   }
   html {
     @apply font-sans;
+  }
+}
+
+@layer utilities {
+  .text-highlight {
+    font-size: var(--text-highlight);
+    color: var(--text-h);
+    line-height: 1.15;
+    font-weight: 600;
+  }
+  .text-caption {
+    font-size: var(--text-caption);
+    color: var(--text-h);
+    opacity: 0.7;
+    line-height: 1.15;
+  }
+  .text-body {
+    font-size: var(--text-body);
+    color: var(--text-h);
+    line-height: 1.5;
   }
 }
