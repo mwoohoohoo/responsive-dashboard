@@ -28,7 +28,7 @@ export const AxisBottom = ({ xScale, pixelsPerTick, label, isMobile }) => {
             style={{
               fontSize: isMobile ? "10px" : "12px",
               textAnchor: "middle",
-              transform: "translateY(20px)",
+              transform: isMobile ? "translateY(16px)" : "translateY(20px)",
             }}
           >
             {value}
@@ -87,7 +87,7 @@ export const CategoricalAxisBottom = ({ xScale, label, isMobile }) => {
             style={{
               fontSize: isMobile ? "10px" : "12px",
               textAnchor: "middle",
-              transform: "translateY(20px)",
+              transform: isMobile ? "translateY(16px)" : "translateY(20px)",
             }}
           >
             {formatCountryLabel(value)}

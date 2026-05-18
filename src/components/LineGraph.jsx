@@ -31,8 +31,8 @@ export const LineGraph = ({
 
   const MARGIN = {
     top: 16,
-    bottom: isMobile ? 24 : 32,
-    left: isMobile ? 40 : 60,
+    bottom: isMobile ? 16 : 32,
+    left: isMobile ? 32 : 60,
     right: isMobile ? 4 : 8,
   };
 

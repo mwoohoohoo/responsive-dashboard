@@ -36,7 +36,7 @@ export const AxisLeft = ({
               textAlign: "right",
               textAnchor: "end",
               dominantBaseline: "middle",
-              transform: "translateX(-12px)",
+              transform: isMobile ? "translateX(-8px)" : "translateX(-12px)",
             }}
           >
             {format(value)}
@@ -47,7 +47,7 @@ export const AxisLeft = ({
       {/* Axis label */}
       {label && (
         <text
-          x={isMobile ? -12 : -height / 2}
+          x={isMobile ? -4 : -height / 2}
           y={isMobile ? -4 : -48}
           fontSize={12}
           textAnchor={isMobile ? "end" : "middle"}

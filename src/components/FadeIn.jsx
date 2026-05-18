@@ -7,18 +7,21 @@ export default function FadeIn({
   y = 24,
   className = "",
   preserveOpacity = false,
+  as = "div",
 }) {
   const [hasAnimated, setHasAnimated] = useState(false);
 
+  const MotionTag = motion[as];
+
   return (
-    <motion.div
+    <MotionTag
       className={className}
       initial={{
-        opacity: 0,
+        opacity: preserveOpacity ? undefined : 0,
         y,
       }}
       whileInView={{
-        opacity: 1,
+        opacity: preserveOpacity ? undefined : 1,
         y: 0,
       }}
       viewport={{ once: true, amount: 0.15 }}
@@ -27,14 +30,14 @@ export default function FadeIn({
         delay,
         ease: [0.22, 1, 0.36, 1],
       }}
-      onAnimationComplete={() => {
-        setHasAnimated(true);
+      onViewportEnter={() => {
+        if (!hasAnimated) {
+          setHasAnimated(true);
+        }
       }}
-      style={
-        preserveOpacity && hasAnimated ? { opacity: undefined } : undefined
-      }
+      animate={preserveOpacity && hasAnimated ? { y: 0 } : undefined}
     >
       {children}
-    </motion.div>
+    </MotionTag>
   );
 }

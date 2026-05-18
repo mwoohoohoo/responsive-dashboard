@@ -40,7 +40,7 @@
   -moz-osx-font-smoothing: grayscale;
 
   --text-h1: clamp(28px, calc(24px + 1vw), 36px);
-  --text-h2: clamp(16px, calc(15px + 1vw), 18px);
+  --text-h2: clamp(16px, calc(15px + 0.4vw), 18px);
   --text-h3: clamp(20px, calc(18px + 0.6vw), 24px);
   --text-highlight: clamp(24px, calc(20px + 0.6vw), 32px);
 

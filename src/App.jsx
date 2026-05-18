@@ -180,12 +180,10 @@ function App() {
           </div>
         </FadeIn>
 
-        <div className="container container--transparent ">
+        <FadeIn delay={0.1} className="container container--transparent ">
           <div className="embla" ref={emblaRef}>
             <div className="embla__container">
-              <FadeIn
-                preserveOpacity
-                delay={0.05}
+              <div
                 className={`embla__slide ${selectedIndex === 0 ? "embla__slide--active" : ""}`}
               >
                 <Card bg="bg-brand-aqua">
@@ -206,11 +204,9 @@ function App() {
                     </p>
                   </div>
                 </Card>
-              </FadeIn>
+              </div>
 
-              <FadeIn
-                preserveOpacity
-                delay={0.1}
+              <div
                 className={`embla__slide ${selectedIndex === 1 ? "embla__slide--active" : ""}`}
               >
                 <Card>
@@ -223,10 +219,9 @@ function App() {
                     </p>
                   </div>
                 </Card>
-              </FadeIn>
+              </div>
 
-              <FadeIn
-                preserveOpacity
+              <div
                 className={`embla__slide ${selectedIndex === 2 ? "embla__slide--active" : ""}`}
                 delay={0.15}
               >
@@ -242,9 +237,9 @@ function App() {
                     </p>
                   </div>
                 </Card>
-              </FadeIn>
+              </div>
             </div>
-            <FadeIn delay={0.2} className="embla__dots">
+            <div className="embla__dots">
               {[0, 1, 2].map((index) => (
                 <button
                   key={index}
@@ -254,89 +249,77 @@ function App() {
                   onClick={() => emblaApi?.scrollTo(index)}
                 />
               ))}
+            </div>
+          </div>
+        </FadeIn>
+
+        <FadeIn as="section" delay={0.2} className="main">
+          <div className="panel">
+            <FadeIn delay={0.3} className="container">
+              <div className="container--text">
+                <h3>Global energy mix</h3>
+                <p className="text-body text-left opacity-70">
+                  Fossil fuels remain dominant, despite renewable energy
+                  consumpton increasing.
+                </p>
+              </div>
+              <ResponsiveStackedAreaGraph data={stackedData} xVariable="year" />
+            </FadeIn>
+            <FadeIn delay={0.4} className="container">
+              <div className="container--text">
+                <h3>Top energy consumers (2024)</h3>
+                <p className="text-body text-left opacity-70">
+                  China and the USA consumed more than India, Japan and Russia
+                  combined.
+                </p>
+              </div>
+              <ResponsiveStackedBarPlot data={stackedChartData} />
             </FadeIn>
           </div>
-        </div>
-        <FadeIn delay={0.25}>
-          <section className="main">
-            <div className="panel">
-              <FadeIn delay={0.3}>
-                <div className="container">
-                  <div className="container--text">
-                    <h3>Global energy mix</h3>
-                    <p className="text-body text-left opacity-70">
-                      Fossil fuels remain dominant, despite renewable energy
-                      consumpton increasing.
-                    </p>
-                  </div>
-                  <ResponsiveStackedAreaGraph
-                    data={stackedData}
-                    xVariable="year"
-                  />
-                </div>
-              </FadeIn>
-              <FadeIn delay={0.35}>
-                <div className="container">
-                  <div className="container--text">
-                    <h3>Top energy consumers (2024)</h3>
-                    <p className="text-body text-left opacity-70">
-                      China and the USA consumed more than India, Japan and
-                      Russia combined.
-                    </p>
-                  </div>
-                  <ResponsiveStackedBarPlot data={stackedChartData} />
-                </div>
-              </FadeIn>
-            </div>
 
-            <div className="panel panel--thirds">
-              <FadeIn delay={0.4}>
-                <div className="container">
-                  <div className="container--text">
-                    <h3>Top renewable energy consumers</h3>
-                    <p className="text-body text-left opacity-70">
-                      China overtook all other countries in renewable
-                      consumption after 2006.
-                    </p>
-                  </div>
-                  <ResponsiveLineGraph
-                    data={renewableChartData}
-                    xVariable="year"
-                    yVariable="value"
-                    groupBy="country"
-                  />
-                </div>
-              </FadeIn>
-              <FadeIn delay={0.45}>
-                <div className="container">
-                  <h3>Renewables mix by country (2024)</h3>
+          <div className="panel panel--thirds">
+            <FadeIn delay={0.4} className="container">
+              <div className="container--text">
+                <h3>Top renewable energy consumers</h3>
+                <p className="text-body text-left opacity-70">
+                  China overtook all other countries in renewable consumption
+                  after 2006.
+                </p>
+              </div>
+              <ResponsiveLineGraph
+                data={renewableChartData}
+                xVariable="year"
+                yVariable="value"
+                groupBy="country"
+              />
+            </FadeIn>
+            <FadeIn delay={0.6} className="container">
+              <h3>Renewables mix by country (2024)</h3>
 
-                  <Select
-                    value={selectedCountry}
-                    onValueChange={(value) => setSelectedCountry(value)}
-                  >
-                    <SelectTrigger className="w-full text-sm bg-white border border-gray-300 rounded-md px-3 py-4">
-                      <SelectValue />
-                    </SelectTrigger>
+              <Select
+                value={selectedCountry}
+                onValueChange={(value) => setSelectedCountry(value)}
+              >
+                <SelectTrigger className="w-full text-sm bg-white border border-gray-300 rounded-md px-3 py-4">
+                  <SelectValue />
+                </SelectTrigger>
 
-                    <SelectContent>
-                      {countries.map((country) => (
-                        <SelectItem
-                          key={country}
-                          value={country}
-                          className="text-sm hover:bg-gray-100"
-                        >
-                          {country}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                <SelectContent>
+                  {countries.map((country) => (
+                    <SelectItem
+                      key={country}
+                      value={country}
+                      className="text-sm hover:bg-gray-100"
+                    >
+                      {country}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
 
-                  <ResponsiveDonutChart data={renewableData} year={2024} />
-                </div>
-              </FadeIn>
-            </div>
-          </section>
+              <ResponsiveDonutChart data={renewableData} year={2024} />
+            </FadeIn>
+          </div>
         </FadeIn>
       </div>
 
